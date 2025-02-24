@@ -1,7 +1,6 @@
 using Godot;
-using System.Collections.Generic;
 
-public partial class PrepStation : CounterStation {
+public abstract partial class PrepStation : CounterStation {
     [Export] protected PackedScene badDish;
 
     [ExportGroup("Progress Bar")]
@@ -11,11 +10,6 @@ public partial class PrepStation : CounterStation {
     protected float currStep = 0;
     protected bool hasNewIngredientSpawned = false;
 
-    protected RecipieR currRecipie;
-    protected List<IngredientR> ingredientRs = new List<IngredientR>();
-    protected List<Ingredient> spawnedIngredients = new List<Ingredient>();
-
-    //public RecipieR GetCurrRecipie { get => currRecipie; }
 
     public override void _Ready() {
         progressUI.Visible = false;
@@ -23,7 +17,7 @@ public partial class PrepStation : CounterStation {
 
     public override void AddIngredient(Ingredient ingredient) {
         base.AddIngredient(ingredient);
-        ResetProgressUI(true, ingAdded.GetCurrProgress);
+        ResetProgressUI(true, ingredient.GetCurrProgress);
     }
 
     public override void ProcessIngredient() {
@@ -38,18 +32,19 @@ public partial class PrepStation : CounterStation {
     }
 
     public override Ingredient RemoveIngredient() {
-        GD.PrintS("Remocing ingredient");
         ResetProgressUI();
         return base.RemoveIngredient();
     }
 
-
     protected void ResetProgressUI(bool isOn = false, float step = 0) {
         currStep = step;
-        maxStep = GetMaxSteps();
-        progressBar.Value = step / maxStep;
+        if (step == 0) {
+            maxStep = GetMaxSteps();
+            progressBar.Value = step / maxStep;
+        }
         progressUI.Visible = isOn;
     }
+
 
     protected Ingredient SpawnNewIngredient(PackedScene ingToSpawn) {
         Ingredient newIng = (Ingredient)ingToSpawn.Instantiate();
