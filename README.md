@@ -1,2 +1,7 @@
-# Cooking-Game
-A cooking game I am working on in Godot using C#. The player can interact with the enviornment to create dishes. It is a work in progress. 
+### Cooking System
+
+- Players interact with the environment to make a dish
+- Made in Godot as a 3D experience
+- Work in progress
+
+
